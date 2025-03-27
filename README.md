@@ -98,5 +98,26 @@ This is the place for you to write reflections:
    - Rust encourages using its type system and ownership model rather than traditional OOP patterns when possible
 
 #### Reflection Publisher-2
+1. We need to separate "Service" and "Repository" from the Model for several important design principles:
+   - **Single Responsibility Principle**: By separating repositories (data access) from services (business logic), each component has one clear responsibility. Repositories handle data persistence operations, while services handle business rules and operations.
+   - **Separation of Concerns**: This separation creates clearer boundaries between data storage, business logic, and presentation, making the system more modular and easier to understand.
+   - **Testability**: With separate layers, we can more easily create unit tests with mocks for each component, rather than needing to test everything together.
+   - **Maintainability**: Changes to database implementation won't affect business logic, and vice versa, allowing teams to work in parallel and reducing the impact of changes.
+   - **Scalability**: These layers can be scaled independently based on their specific needs (e.g., database connections vs. business processing).
+
+2. If we only used the Model to handle everything (data storage, business logic, etc.):
+   - **Coupling**: Program, Subscriber, and Notification models would become tightly coupled, with each needing to know too much about the others' implementations.
+   - **Code Complexity**: Each model would grow unmanageably large, handling persistence, business rules, notifications, and more.
+   - **Decreased Cohesion**: Models would lose their focused purpose, becoming catch-all entities responsible for too many different functions.
+   - **Difficult Testing**: Testing would require setting up the entire ecosystem rather than isolating components.
+   - **Example**: The Program model would need to manage subscriber lists, send notifications, handle HTTP calls, and maintain its own data, violating multiple design principles and creating a maintenance nightmare.
+
+3. Exploring Postman has been valuable for testing this system:
+   - **Request Collections**: Organizing related API calls together helps maintain structure during testing different components (subscribers, products, notifications).
+   - **Environment Variables**: Setting up different environments (development, testing) makes it easy to switch between them without changing request URLs.
+   - **Automated Testing**: The ability to write test scripts for responses ensures endpoints behave as expected consistently.
+   - **Request Chaining**: Using data from previous responses in subsequent requests lets me test workflows, like subscribing and then testing notification delivery.
+   - **Mock Servers**: For future projects, Postman's mock server capability could help front-end development progress independently of backend completion.
+   - **Team Collaboration**: Sharing collections makes it easier to collaborate with team members who need to understand and test the API.
 
 #### Reflection Publisher-3
