@@ -77,6 +77,25 @@ This is the place for you to write reflections:
 ### Mandatory (Publisher) Reflections
 
 #### Reflection Publisher-1
+1. In the Observer pattern, traditionally the Subscriber is defined as an interface. In the BambangShop case, we could use a trait to define the behavior of Subscribers, but a single Model struct is sufficient because:
+   - We have a single, consistent implementation of Subscribers
+   - All subscribers interact with the system in the same way (receiving HTTP notifications)
+   - The behavior is simple enough that we don't need multiple implementations of the Subscriber concept
+   - Using a struct directly simplifies the code and aligns well with Rust's preference for concrete types when abstractions aren't needed
+
+2. Using DashMap (map/dictionary) instead of Vec (list) is necessary in this case because:
+   - We need to ensure uniqueness of IDs and URLs efficiently
+   - Looking up subscribers by ID is a common operation that should be fast
+   - DashMap provides O(1) lookup time compared to O(n) for Vec when searching for items
+   - We need to perform frequent additions and removals which are more efficient with DashMap
+   - DashMap provides thread-safety guarantees which are important in a web server context
+
+3. DashMap is preferred over implementing a Singleton pattern because:
+   - Rust's ownership system makes traditional Singleton implementation complex
+   - DashMap already provides thread-safety guarantees that we would need to implement manually
+   - DashMap handles concurrent access efficiently, which is crucial for a web application
+   - Using a battle-tested library reduces the chance of subtle concurrency bugs
+   - Rust encourages using its type system and ownership model rather than traditional OOP patterns when possible
 
 #### Reflection Publisher-2
 
