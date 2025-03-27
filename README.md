@@ -121,3 +121,30 @@ This is the place for you to write reflections:
    - **Team Collaboration**: Sharing collections makes it easier to collaborate with team members who need to understand and test the API.
 
 #### Reflection Publisher-3
+1. In this tutorial case, we use the **Push model** variation of the Observer Pattern. The publisher (BambangShop) actively pushes notifications with relevant data to subscribers whenever there's a state change (product creation, deletion, or promotion). The publisher determines when to send data and what data to include in the notification payload, while subscribers are passive receivers that simply process the incoming data.
+
+2. Advantages and disadvantages of using the Pull model instead:
+
+   **Advantages of Pull model:**
+   - Subscribers could retrieve only the information they need, potentially reducing network traffic
+   - Subscribers could request updates at their own pace, preventing overwhelm during high-activity periods
+   - Less coupling between publisher and subscriber, as the publisher doesn't need to know what data each subscriber requires
+   - Better fault tolerance, as temporary subscriber unavailability doesn't result in missed notifications
+   
+   **Disadvantages of Pull model:**
+   - Increased latency in notification delivery, as subscribers might poll at intervals rather than receiving immediate updates
+   - Higher overall system load due to frequent polling from multiple subscribers
+   - More complex implementation requiring subscribers to maintain state to detect changes
+   - Potential data inconsistency if subscribers poll at different times
+   - Inefficient use of resources when there are no updates to retrieve
+
+3. If we decided not to use multi-threading in the notification process:
+
+   - **Performance bottleneck**: The application would process notifications sequentially, blocking the main thread while waiting for each HTTP request to complete
+   - **Request timeout issues**: Slow or unresponsive subscribers would block the entire notification process
+   - **Poor scalability**: As the number of subscribers increases, notification time would increase linearly
+   - **Reduced responsiveness**: The application would appear frozen during notification broadcasts
+   - **Potential deadlocks**: If a subscriber tries to interact with the publisher while waiting for notification processing to complete
+   - **Higher failure impact**: A single failed notification could delay or prevent notifications to other subscribers
+   
+   Using multi-threading allows the application to send notifications asynchronously, ensuring the main application remains responsive regardless of how many subscribers need to be notified or how long they take to respond. This is especially important in a web service context where user experience depends on quick response times.
